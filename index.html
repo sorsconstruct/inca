@@ -1928,8 +1928,8 @@
 			$btn.prop('disabled', true).text(lang === 'en' ? 'Processing…' : 'Обработва се…');
 
 			const payload = {
-				name: name,
-				address: address,
+				name: encodeURIComponent(name),
+				address: encodeURIComponent(address),
 				book_count: count,
 				payment_type: payment,
 				lang: lang,
