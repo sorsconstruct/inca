@@ -1976,15 +1976,51 @@
             const $btn = $('#btnContact');
             $btn.prop('disabled', true).text(lang === 'en' ? 'Sending…' : 'Изпращане…');
 
-            const payload = { name, email, subject, message, lang, ts: new Date().toISOString() };
+            // const payload = { name, email, subject, message, lang, ts: new Date().toISOString() };
+			 
+			const payload = {
+				name: encodeURIComponent(name),
+				email: encodeURIComponent(email),
+				subject: encodeURIComponent(subject),
+				message: encodeURIComponent(message),
+				lang: lang,
+				ts: new Date().toISOString(),
+			};
 
             try {
-                await fetch('/api/contact', {
+
+
+				  // redirect from
+                var rParam = getUrlParameter('r') || "inca";
+
+                // cv id guid
+                var idParam = getUrlParameter('id');
+
+                // request access message
+                var mParam = getUrlParameter('m') || "CONTACT INCA BOOK";
+
+                var url = "https://www.karibi.somee.com/api/logging/log";
+
+                var qs = [];
+
+                if (rParam) qs.push("r=" + encodeURIComponent(rParam));
+                if (idParam) qs.push("id=" + encodeURIComponent(idParam));
+                if (mParam) qs.push("m=" + encodeURIComponent(mParam));
+
+                if (qs.length > 0) {
+                    url += "?" + qs.join("&");
+                }
+
+                await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
                 });
-            } catch (_) { }
+            } 
+			catch (_) 
+			{ 
+				
+			}
 
             showToast(lang === 'en'
                 ? '✦  Message sent! We will reply soon.'
